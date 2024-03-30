@@ -25,7 +25,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.BorderPane;
 
+/** Controller class for handling UI interactions */
 public class MainController {
+
+    /** FXML Declarations */
     @FXML
     private BorderPane root;
 
@@ -56,20 +59,24 @@ public class MainController {
     @FXML
     private GridPane gridPane;
 
-    LastFMAPIManager manager;
+    /** Instance of LastFMAPIManager */
+    private LastFMAPIManager manager;
 
+    /** Instance of JavaFX Image */
     private javafx.scene.image.Image image;
 
+    /** Default search item */
     private String toSearchItem = "Artist";
 
+    /** Initialize method called when FXML is loaded */
+    @FXML
     public void initialize() {
-
         searchAlbumLabel.setVisible(false);
         searchAlbumTextField.setVisible(false);
         initializeComboBoxes();
         manager = new LastFMAPIManager();
-        // searchButton.setOnAction(event -> handleSearch());
 
+        // Event handler for ComboBox selection
         typeOfSearchCombobox.setOnAction(event -> {
             String selectedOption = typeOfSearchCombobox.getValue();
             toSearchItem = selectedOption;
@@ -83,62 +90,87 @@ public class MainController {
         });
     }
 
+    /** Initialize ComboBoxes */
     private void initializeComboBoxes() {
         typeOfSearchCombobox.getItems().addAll("Artist", "Album");
         typeOfSearchCombobox.setValue("Artist");
     }
 
+    /** Handle search event */
+    @FXML
     private void handleSearch() {
-        if (!searchArtistTextField.getText().isEmpty() && !searchAlbumTextField.getText().isEmpty()) {
+        String artist = searchArtistTextField.getText().trim();
+        String album = searchAlbumTextField.getText().trim();
 
-            Tracks trackInfo = manager.getAlbumInfo(searchArtistTextField.getText(), searchAlbumTextField.getText());
-            gridListAlbumInfo(trackInfo);
 
-        } else if (!searchArtistTextField.getText().isEmpty()) {
+        // Check if artist field is empty
+        if (artist.isEmpty()) {
+            sumaryTextAreaField.setText("Please enter an Artist name");
+            return;
+        }
 
-            ArtistInfo artistInfo = manager.getArtistInfo(searchArtistTextField.getText());
-            TopAlbumsData albums = manager.getTopAlbums(searchArtistTextField.getText());
+        // Check search type and perform appropriate search
+        if (!album.isEmpty() && toSearchItem.equals("Album")) {
+            searchByAlbum(artist, album);
+        } else {
+            searchByArtist(artist);
+        }
+    }
+
+    /** Search albums by artist */
+    private void searchByAlbum(String artist, String album) {
+        Thread searchThread = new Thread(() -> {
+            // Retrieve album information from LastFMAPIManager
+            Tracks trackInfo = manager.getAlbumInfo(artist, album);
+            // Update UI with album information
+            Platform.runLater(() -> gridListAlbumInfo(trackInfo));
+        });
+        searchThread.start();
+    }
+
+    /** Search artist */
+    private void searchByArtist(String artist) {
+        Thread searchThread = new Thread(() -> {
+            // Retrieve artist information and top albums from LastFMAPIManager
+            ArtistInfo artistInfo = manager.getArtistInfo(artist);
+            TopAlbumsData albums = manager.getTopAlbums(artist);
 
             Platform.runLater(() -> {
+                // Display artist bio if available, else show 'Artist not found' message
                 if (artistInfo.getArtist() == null) {
                     sumaryTextAreaField.setText("Artist not Found!");
                     return;
                 }
 
-                // Assuming you have a GridPane instance called gridPane
+                // Iterate through top albums and display album covers as Hyperlinks
                 int col = 0;
                 int row = 0;
                 int count = 0;
                 for (Album album : albums.getTopalbums().getAlbum()) {
-
                     Optional<Image> foundImage = album.getImage().stream()
                             .filter(albumImage -> "large".equals(albumImage.getSize())
-                                    && !"".equals(albumImage.getText()))
+                                    && !albumImage.getText().isEmpty())
                             .findFirst();
 
                     if (foundImage.isPresent()) {
                         image = new javafx.scene.image.Image(foundImage.get().getText());
                         ImageView imageView = new ImageView(image);
 
-                        // Crie um Hyperlink
+                        // Create Hyperlink with album cover as graphic
                         Hyperlink hyperlink = new Hyperlink();
                         hyperlink.setGraphic(imageView);
                         Tooltip tooltip = new Tooltip();
                         tooltip.setText(album.getName());
                         hyperlink.setTooltip(tooltip);
 
-                        // Configure um evento de clique para o Hyperlink
+                        // Handle click event on Hyperlink to display album tracks
                         hyperlink.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                            // Obtenha o nome do artista e do álbum associado a esta imagem
                             String artistName = album.getArtist().getName();
                             String albumName = album.getName();
-
-                            // Chame o método getAlbumInfo
-                            Tracks trackInfo = manager.getAlbumInfo(artistName, albumName);
-                            gridListAlbumInfo(trackInfo);
+                            searchByAlbum(artistName, albumName);
                         });
 
-                        // Add the ImageView to the desired cell in the GridPane
+                        // Add Hyperlink to GridPane
                         gridPane.add(hyperlink, row, col);
                         if (row < 4) {
                             row++;
@@ -147,12 +179,9 @@ public class MainController {
                             row = 0;
                         }
 
-                        if (count == 14) {
+                        if (++count == 15) {
                             break;
-                        } else {
-                            count++;
                         }
-
                         artistImageViewId.setImage(image);
                         sumaryTextAreaField.setText(artistInfo.getArtist().getBio().getSummary());
                     } else {
@@ -161,54 +190,23 @@ public class MainController {
                     }
                 }
             });
-        } else {
-            sumaryTextAreaField.setText("Please enter an Artist name");
-        }
+        });
+        searchThread.start();
     }
 
-    // private void gridListAlbumInfo(Tracks albumInfo) {
-
-    //     sumaryTextAreaField.clear();
-    //     if (albumInfo != null && albumInfo.getAlbum() != null && albumInfo.getAlbum().getTracks() != null) {
-    //         String tracks = "Album: " + albumInfo.getAlbum().getName() + "\n\n";
-
-    //         for (int i = 0; i < albumInfo.getAlbum().getTracks().getTrack().size(); i++) {
-    //             // Obtém o nome da faixa
-    //             String trackName = albumInfo.getAlbum().getTracks().getTrack().get(i).getName();
-    //             String durarion = albumInfo.getAlbum().getTracks().getTrack().get(i).getDuration();
-
-    //             tracks += "Track : " + (i + 1) + " - " + trackName + " ....................... "
-    //                     + (durarion != null ? secondsToMinutes(Integer.parseInt(durarion)) : "00:00") + "\n";
-
-    //             // Adicione o Label ao GridPane
-    //             sumaryTextAreaField.setText(tracks);
-
-    //         }
-
-    //         Optional<com.danilomendes.Model.Tracks.Image> albumCover = albumInfo.getAlbum().getImage().stream()
-    //                 .filter(albumImage -> "large".equals(albumImage.getSize()) && !"".equals(albumImage.getText()))
-    //                 .findFirst();
-
-    //         if (albumCover.isPresent()) {
-    //             image = new javafx.scene.image.Image(albumCover.get().getText());
-    //             artistImageViewId.setImage(image);
-    //         }
-    //     } else {
-    //         // Adicione o Label ao GridPane
-    //         sumaryTextAreaField.setText("Album not found or database data inconsistent, sorry!\nTry another Album or Artist");
-    //     }
-    // }
-
+    /** List album info in the TextArea */
     private void gridListAlbumInfo(Tracks albumInfo) {
         sumaryTextAreaField.clear();
-    
+
         if (albumInfo != null && albumInfo.getAlbum() != null && albumInfo.getAlbum().getTracks() != null) {
-            StringBuilder tracksBuilder = new StringBuilder("Album: ").append(albumInfo.getAlbum().getName()).append("\n\n");
-    
+            StringBuilder tracksBuilder = new StringBuilder("Album: ").append(albumInfo.getAlbum().getName())
+                    .append("\n\n");
+
+            // Append each track name and duration to the StringBuilder
             for (Track track : albumInfo.getAlbum().getTracks().getTrack()) {
                 String trackName = track.getName();
                 String duration = track.getDuration();
-    
+
                 tracksBuilder.append("Track: ").append(trackName).append(" ....................... ");
                 if (duration != null && !duration.isEmpty()) {
                     try {
@@ -222,40 +220,55 @@ public class MainController {
                 }
                 tracksBuilder.append("\n");
             }
-    
+
             sumaryTextAreaField.setText(tracksBuilder.toString());
-    
+
+            // Set album cover image if available
             Optional<Tracks.Image> albumCover = albumInfo.getAlbum().getImage().stream()
                     .filter(albumImage -> "large".equals(albumImage.getSize()) && !albumImage.getText().isEmpty())
                     .findFirst();
-    
-            albumCover.ifPresent(cover -> {
-                javafx.scene.image.Image image = new javafx.scene.image.Image(cover.getText());
+
+            albumCover.ifPresent(lbCover -> {
+                javafx.scene.image.Image image = new javafx.scene.image.Image(lbCover.getText());
                 artistImageViewId.setImage(image);
             });
+
+            // Remove existing background image (if any)
+            root.getChildren().removeIf(node -> node instanceof ImageView);
+            // Set album cover image if available
+            Optional<Tracks.Image> albumCoverExtralarge = albumInfo.getAlbum().getImage().stream()
+                    .filter(albumImage -> "extralarge".equals(albumImage.getSize()) && !albumImage.getText().isEmpty())
+                    .findFirst();
+
+            albumCoverExtralarge.ifPresent(bgCover -> {
+                javafx.scene.image.Image image = new javafx.scene.image.Image(bgCover.getText());
+                // Load and set the background image
+                ImageView backgroundImage = new ImageView(image);
+                backgroundImage.fitWidthProperty().bind(root.widthProperty());
+                backgroundImage.fitHeightProperty().bind(root.heightProperty());
+                backgroundImage.setOpacity(0.2);
+                root.getChildren().add(backgroundImage);
+                backgroundImage.toBack();
+            });
+
         } else {
-            sumaryTextAreaField.setText("Album not found or database data inconsistent, sorry!\nTry another Album or Artist");
+            sumaryTextAreaField
+                    .setText("Album not found or database data inconsistent, sorry!\nTry another Album or Artist");
         }
     }
-    
 
+    /** Convert seconds to minutes */
     public static String secondsToMinutes(int seconds) {
-        // Converte segundos para minutos
         int minutes = seconds / 60;
-
-        // Calcula os segundos restantes após a conversão para minutos
         int remainingSeconds = seconds % 60;
-
-        // Formata os minutos e segundos em uma string com a máscara desejada
-        DecimalFormat df = new DecimalFormat("00"); // Define a máscara para dois dígitos
+        DecimalFormat df = new DecimalFormat("00");
         String formattedTime = df.format(minutes) + ":" + df.format(remainingSeconds);
-
         return formattedTime;
     }
 
+    /** Load image */
     @FXML
     private void loadImage() {
-
         Thread searchThread = new Thread(() -> {
             image = new javafx.scene.image.Image(
                     MainController.class.getResourceAsStream("/com/danilomendes/images/load.gif"));
@@ -267,7 +280,6 @@ public class MainController {
             handleSearch();
         });
         handleSearch.start();
-        // Iniciar a thread
     }
 
     /** Close the application */

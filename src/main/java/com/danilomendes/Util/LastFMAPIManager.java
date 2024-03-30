@@ -12,10 +12,20 @@ import com.danilomendes.Model.ArtistInfo;
 import com.danilomendes.Model.TopAlbumsData;
 import com.google.gson.Gson;
 
+/** 
+ * Utility class for interacting with the Last.fm API
+ */
 public class LastFMAPIManager {
+    /** Last.fm API Key */
     private static final String API_KEY = APIKeyReader.readAPIKey();
+    /** Last.fm API URL */
     private static final String API_URL = "http://ws.audioscrobbler.com/2.0/";
 
+    /**
+     * Get artist information from Last.fm API
+     * @param artist The name of the artist
+     * @return ArtistInfo object containing artist information
+     */
     public ArtistInfo getArtistInfo(String artist) {
         try {
             String encodedArtist = URLEncoder.encode(artist, "UTF-8");
@@ -37,6 +47,11 @@ public class LastFMAPIManager {
         return null;
     }
 
+    /**
+     * Get top albums for an artist from Last.fm API
+     * @param artistOrMbid The name of the artist or MusicBrainz identifier
+     * @return TopAlbumsData object containing top albums information
+     */
     public TopAlbumsData getTopAlbums(String artistOrMbid) {
         try {
             String encodedArtist = URLEncoder.encode(artistOrMbid, "UTF-8");
@@ -59,6 +74,12 @@ public class LastFMAPIManager {
         return null;
     }
 
+    /**
+     * Get album information from Last.fm API
+     * @param artistOrMbid The name of the artist or MusicBrainz identifier
+     * @param album The name of the album
+     * @return Tracks object containing album information
+     */
     public Tracks getAlbumInfo(String artistOrMbid, String album) {
         try {
             String encodedArtist = URLEncoder.encode(artistOrMbid, "UTF-8");

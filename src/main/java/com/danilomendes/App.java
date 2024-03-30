@@ -9,10 +9,19 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+/**
+ * The main application class responsible for initializing and launching the JavaFX application.
+ */
 public class App extends Application {
 
     private static Scene scene;
 
+    /**
+     * The entry point for the JavaFX application.
+     *
+     * @param stage The primary stage for the application, onto which the application scene can be set.
+     * @throws IOException if an error occurs during FXML loading.
+     */
     @Override
     public void start(Stage stage) throws IOException {
 
@@ -32,6 +41,11 @@ public class App extends Application {
         stage.show();
     }
 
+    /**
+     * The main method, launching the application.
+     *
+     * @param args Command-line arguments.
+     */
     public static void main(String[] args) {
         launch();
     }
