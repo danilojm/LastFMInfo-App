@@ -1,15 +1,12 @@
 package com.danilomendes.Model;
 
-import java.util.List;
+public class Track {
 
-public class Album {
     private String name;
     private String mbid;
     private String url;
+    private String duration;
     private Artist artist;
-    private List<Image> image;
-    private TracksList tracks;
-
 
     public String getName() {
         return name;
@@ -35,28 +32,20 @@ public class Album {
         this.url = url;
     }
 
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
     public Artist getArtist() {
         return artist;
     }
 
     public void setArtist(Artist artist) {
         this.artist = artist;
-    }
-
-    public List<Image> getImage() {
-        return image;
-    }
-
-    public void setImage(List<Image> image) {
-        this.image = image;
-    }
-
-    public TracksList getTracks() {
-        return tracks;
-    }
-
-    public void setTracks(TracksList tracks) {
-        this.tracks = tracks;
     }
 
 }

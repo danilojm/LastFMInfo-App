@@ -20,7 +20,7 @@ public class App extends Application {
 
         // Load the FXML and set the scene
         Parent root = FXMLLoader.load(getClass().getResource("view/MainView.fxml"));
-        scene = new Scene(root, 1920, 1080);
+        scene = new Scene(root);
         scene.getStylesheets().add(css);
 
         // Set the alignment of the center region of the BorderPane to center
@@ -28,7 +28,7 @@ public class App extends Application {
 
         // Set the stage to fullscreen
         stage.setScene(scene);
-        stage.setFullScreen(true);
+        //stage.setFullScreen(true);
         stage.show();
     }
 

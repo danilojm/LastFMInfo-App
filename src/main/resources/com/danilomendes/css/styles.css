@@ -1,6 +1,5 @@
 /* styles.css */
 
-/* Style for GridPane */
-#gridPane {
-  -fx-padding: 50px 0 0 0;
+.centered-pane {
+  -fx-alignment: center;
 }

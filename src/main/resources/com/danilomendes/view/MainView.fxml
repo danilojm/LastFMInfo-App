@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Cursor?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -12,61 +12,56 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
-
 <?import javafx.scene.layout.StackPane?>
 
-<BorderPane fx:id="root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-  fx:controller="com.danilomendes.Controller.MainController">
-  <center>
-    <BorderPane prefHeight="845.0" prefWidth="983.0" BorderPane.alignment="CENTER">
-      <top>
-        <StackPane>
-          <Pane prefHeight="186.0" prefWidth="983.0" BorderPane.alignment="CENTER">
-            <children>
-              <Label layoutX="37.0" layoutY="14.0" text="Type of Search" />
+<BorderPane fx:id="root" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.danilomendes.Controller.MainController">
+   <top>
+      <StackPane BorderPane.alignment="CENTER">
+         <Pane>
+            <TextField fx:id="searchArtistTextField" layoutX="37.0" layoutY="84.0" prefHeight="25.0" prefWidth="179.0" />
 
-              <Button fx:id="searchButton" layoutX="37.0" layoutY="122.0" mnemonicParsing="false"
-                text="Search" />
+            <Button fx:id="searchButton" layoutX="222.0" layoutY="33.0" mnemonicParsing="false" onAction="#loadImage" text="Search" />
 
-              <ImageView fx:id="artistImageViewId" fitHeight="150.0" fitWidth="200.0"
-                layoutX="769.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="typeOfSearchLabel" layoutX="37.0" layoutY="63.0" text="Artist" />
+            <ComboBox fx:id="typeOfSearchCombobox" editable="true" layoutX="37.0" layoutY="33.0" prefHeight="25.0" prefWidth="179.0" />
 
-              <TextArea fx:id="sumaryTextAreaField" editable="false" layoutX="250.0" layoutY="10.0"
-                prefHeight="151.0" prefWidth="511.0" wrapText="true" />
+            <TextArea fx:id="sumaryTextAreaField" editable="false" layoutX="280.0" layoutY="10.0" prefHeight="151.0" prefWidth="481.0" wrapText="true" />
 
-              <ComboBox fx:id="typeOfSearchCombobox" editable="true" layoutX="37.0" layoutY="37.0"
-                prefHeight="25.0" prefWidth="179.0" />
 
-              <Label fx:id="typeOfSearchLabel" layoutX="37.0" layoutY="68.0" text="Artist" />
+            <Label fx:id="searchAlbumLabel" layoutX="37.0" layoutY="113.0" text="Album" />
+            <TextField fx:id="searchAlbumTextField" layoutX="37.0" layoutY="134.0" prefHeight="25.0" prefWidth="179.0" />
 
-              <TextField fx:id="searchTextField" layoutX="37.0" layoutY="89.0" prefHeight="25.0"
-                prefWidth="179.0" />
+            <ImageView fx:id="artistImageViewId" fitHeight="180.0" fitWidth="200.0" layoutX="769.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" />
+            <Label layoutX="471.0" layoutY="180.0" text="Top Albums" />
 
-            </children>
-          </Pane>
-          <Button text="Close" onAction="#closeApplication" StackPane.alignment="TOP_RIGHT" />
-        </StackPane>
-      </top>
-      <center>
-        <StackPane alignment="CENTER">
-          <GridPane fx:id="gridPane" prefHeight="646.0" prefWidth="983.0"
-            BorderPane.alignment="CENTER">
+         </Pane>
 
-            <columnConstraints>
-              <ColumnConstraints />
-            </columnConstraints>
+         <Button onAction="#closeApplication" text="Close" StackPane.alignment="TOP_RIGHT">
+            <StackPane.margin>
+               <Insets right="20.0" top="10.0" />
+            </StackPane.margin>
+         </Button>
 
-            <rowConstraints>
-              <RowConstraints />
-            </rowConstraints>
+         <Label layoutX="36.0" text="Type of Search" StackPane.alignment="TOP_LEFT">
+            <StackPane.margin>
+               <Insets left="40.0" top="10.0" />
+            </StackPane.margin>
+         </Label>
+      </StackPane>
+   </top>
+   <center>
+      <StackPane BorderPane.alignment="CENTER">
+         <children>
+            <GridPane fx:id="gridPane" alignment="CENTER" hgap="10.0" translateY="0" vgap="10.0">
+               <columnConstraints>
+                  <ColumnConstraints />
+               </columnConstraints>
 
-            <cursor>
-              <Cursor fx:constant="DEFAULT" />
-            </cursor>
-
-          </GridPane>
-        </StackPane>
-      </center>
-    </BorderPane>
-  </center>
+               <rowConstraints>
+                  <RowConstraints />
+               </rowConstraints>
+            </GridPane>
+         </children>
+      </StackPane>
+   </center>
 </BorderPane>

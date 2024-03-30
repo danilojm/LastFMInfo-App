@@ -1,2 +1,5 @@
 .vscode/
 target/
+
+# Ignore config.properties file
+/src/main/resources/config.properties
