@@ -56,7 +56,7 @@ public class LastFMAPIManager {
         try {
             String encodedArtist = URLEncoder.encode(artistOrMbid, "UTF-8");
             String urlString = API_URL + "?method=artist.gettopalbums&artist=" + encodedArtist + "&api_key=" + API_KEY
-                    + "&format=json";
+                    + "&limit=15&format=json";
 
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest httpRequest = HttpRequest.newBuilder().uri(URI.create(urlString)).build();

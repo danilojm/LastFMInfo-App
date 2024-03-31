@@ -102,7 +102,6 @@ public class MainController {
         String artist = searchArtistTextField.getText().trim();
         String album = searchAlbumTextField.getText().trim();
 
-
         // Check if artist field is empty
         if (artist.isEmpty()) {
             sumaryTextAreaField.setText("Please enter an Artist name");
@@ -179,9 +178,6 @@ public class MainController {
                             row = 0;
                         }
 
-                        if (++count == 15) {
-                            break;
-                        }
                         artistImageViewId.setImage(image);
                         sumaryTextAreaField.setText(artistInfo.getArtist().getBio().getSummary());
                     } else {

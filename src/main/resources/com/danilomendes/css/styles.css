@@ -3,3 +3,30 @@
 .centered-pane {
   -fx-alignment: center;
 }
+
+.close-button {
+    -fx-background-color:
+        linear-gradient(to bottom, #ff5e5e, #ff0000),
+        radial-gradient(center 50% -40%, radius 200%, #ff5e5e 45%, #ff0000 50%);
+    -fx-background-radius: 6, 5;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.25) , 5,0,0,1 );
+    -fx-text-fill: #ffffff;
+}
+
+.close-button:hover {
+    -fx-background-color:
+        linear-gradient(to bottom, #ff0000, #ff5e5e),
+        radial-gradient(center 50% -40%, radius 200%, #ff0000 45%, #ff5e5e 50%);
+}
+
+
+.search-button { 
+  -fx-background-color:
+        linear-gradient(to bottom, #5d78ff, #2648ff),
+        radial-gradient(center 50% -40%, radius 200%, #3a65ff 45%, #001dc8 50%);
+    -fx-background-radius: 6, 5;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.25) , 5,0,0,1 );
+    -fx-text-fill: #ffffff;
+}
