@@ -26,7 +26,6 @@ public class App extends Application {
      *              application scene can be set.
      * @throws IOException if an error occurs during FXML loading.
      */
-    @SuppressWarnings("exports")
     @Override
     public void start(Stage stage) throws IOException {
 
@@ -37,7 +36,7 @@ public class App extends Application {
             Image icon = new Image(getClass().getResourceAsStream("images/lastfm-icon.png"));
             stage.getIcons().add(icon);
 
-            stage.setTitle("LastFM API - Artists Info App - by Danilo Mendes de Oliveira - 200549002");
+            stage.setTitle("LastFM API - Artists Info App - by Danilo Mendes de Oliveira - Student Number: 200549002");
 
             // Apply Style CSS to the project
             Scene scene = new Scene(root);
