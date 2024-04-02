@@ -144,7 +144,6 @@ public class MainController {
                 // Iterate through top albums and display album covers as Hyperlinks
                 int col = 0;
                 int row = 0;
-                int count = 0;
                 for (Album album : albums.getTopalbums().getAlbum()) {
                     Optional<Image> foundImage = album.getImage().stream()
                             .filter(albumImage -> "large".equals(albumImage.getSize())
@@ -171,7 +170,7 @@ public class MainController {
 
                         // Add Hyperlink to GridPane
                         gridPane.add(hyperlink, row, col);
-                        if (row < 4) {
+                        if (row < 5) {
                             row++;
                         } else {
                             col++;
@@ -240,8 +239,11 @@ public class MainController {
                 javafx.scene.image.Image image = new javafx.scene.image.Image(bgCover.getText());
                 // Load and set the background image
                 ImageView backgroundImage = new ImageView(image);
-                backgroundImage.fitWidthProperty().bind(root.widthProperty());
-                backgroundImage.fitHeightProperty().bind(root.heightProperty());
+
+                backgroundImage.fitWidthProperty().bind(root.widthProperty().subtract(20));
+                backgroundImage.fitHeightProperty().bind(root.heightProperty().subtract(8));
+                backgroundImage.setTranslateX(10);
+                backgroundImage.setTranslateY(10);
                 backgroundImage.setOpacity(0.2);
                 root.getChildren().add(backgroundImage);
                 backgroundImage.toBack();

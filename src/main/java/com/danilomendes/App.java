@@ -2,13 +2,9 @@ package com.danilomendes;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.transform.Scale;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -22,8 +18,6 @@ import java.util.logging.Logger;
  * JavaFX application.
  */
 public class App extends Application {
-
-    private static Scene scene;
 
     /**
      * The entry point for the JavaFX application.
@@ -42,7 +36,7 @@ public class App extends Application {
             Image icon = new Image(getClass().getResourceAsStream("images/lastfm-icon.png"));
             stage.getIcons().add(icon);
 
-            stage.setTitle("Artists Info App - by Danilo Mendes de Oliveira");
+            stage.setTitle("LastFM API - Artists Info App - by Danilo Mendes de Oliveira - 200549002");
 
             // Apply Style CSS to the project
             Scene scene = new Scene(root);
@@ -51,8 +45,8 @@ public class App extends Application {
             // Obtendo o monitor primário
             Screen screen = Screen.getPrimary();
             // Definindo o estágio para o modo de tela cheia
-            stage.setWidth(screen.getBounds().getWidth()-20);
-            stage.setHeight(screen.getBounds().getHeight()-50);
+            stage.setWidth(screen.getBounds().getWidth()-10);
+            stage.setHeight(screen.getBounds().getHeight()-40);
 
             // Definindo o estágio para ter bordas decoradas
             stage.initStyle(StageStyle.DECORATED);
