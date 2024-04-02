@@ -26,6 +26,7 @@ public class App extends Application {
      *              application scene can be set.
      * @throws IOException if an error occurs during FXML loading.
      */
+    @SuppressWarnings("exports")
     @Override
     public void start(Stage stage) throws IOException {
 
